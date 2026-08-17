@@ -1,7 +1,10 @@
 import express from 'express';
 import dotenv from 'dotenv';
 dotenv.config();
+
 import './config/db.js'
+import './config/redis.js'
+
 import cookieParser from "cookie-parser";
 import cors from 'cors';
 
