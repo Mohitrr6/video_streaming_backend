@@ -1,6 +1,7 @@
-import mediaService from '../services/mediaServices.js';
 import fs from 'fs/promises';
 
+import mediaService from '../services/mediaServices.js';
+import redisHandler from '../helpers/transcoderHelpers.js'
 const getUploadId = async (req, res) => {
     try {
         const uploadId = await mediaService.generateUploadId(); 
@@ -23,6 +24,7 @@ const validateMedia = async(req,res)=>{
         const {upload_id,total_chunks,file_name} = req.headers;
         const files = await fs.readdir(`${process.cwd().replace(/\\/g, "/")}/uploads/${upload_id}`);
         if(files && files.length == total_chunks){
+            const result = await redisHandler.addJobToQueue(upload_id)
             res.status(200).json({"success":true,"msg": "video Verified"})
         }else{
             console.log(files)
