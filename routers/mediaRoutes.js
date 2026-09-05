@@ -7,16 +7,11 @@ import validateToken from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
  const storage = multer.diskStorage({
-  destination: function async(req, file, cb) {
+  destination: async function (req, file, cb) {
     const uploadId = req.headers.upload_id;
-     const uploadPath = `${process.cwd()}/uploads/${uploadId}`;
-    fs.mkdir(uploadPath, { recursive: true }, (err) => {
-            if (err) {
-                return cb(err);
-            }
-
-            cb(null, uploadPath);
-        });
+    
+    await fs.mkdir(`${process.cwd().replace(/\\/g, "/")}/uploads/${uploadId}`,{recursive:true});
+    cb(null, `${process.cwd().replace(/\\/g, "/")}/uploads/${uploadId}`)
   },
   filename: function (req, file, cb) {
     
