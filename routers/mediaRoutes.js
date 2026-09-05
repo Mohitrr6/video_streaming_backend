@@ -3,6 +3,7 @@ import mediaController from "../controllers/mediaController.js";
 import multer from "multer";
 import fs from 'fs/promises';
 import validateMedia from '../middlewares/mediaMiddleware.js'
+import validateToken from "../middlewares/authMiddleware.js";
 const router = express.Router();
 
  const storage = multer.diskStorage({
@@ -23,8 +24,12 @@ const upload = multer({ storage: storage });
 
 
 router
-  .get('/get/uploadId', mediaController.getUploadId)
-  .post('/upload',validateMedia,upload.single("file"),mediaController.handleMedia)
-  .get('/verify',mediaController.validateMedia)
+  .get('/get/uploadId', validateToken,mediaController.getUploadId)
+  .post('/upload',validateToken,validateMedia,upload.single("file"),mediaController.handleMedia)
+  .post('/verify',validateToken,mediaController.validateMedia)
+  .get('/videos',mediaController.getAllVideos)
+  .get('/:videoId/thumbnail',mediaController.getThumbnail)
+  .get('/:videoId/manifest',mediaController.getManifestFile)
+  .get('/:videoId/:resolution/:fileName',mediaController.getManifestFile)
 
 export default router;  

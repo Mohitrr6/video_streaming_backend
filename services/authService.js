@@ -9,8 +9,7 @@ const registerUser = async(userdata)=>{
         }
         const result = await authRepo.addNewUser(resultData);
         const accessToken = await authHelpers.generateAccessToken(resultData);
-        const refreshToken  = await authHelpers.generateRefreshToken(resultData);
-        return {"msg": "User Added Successfully","tokens" : {accessToken,refreshToken}};
+        return {"msg": "User Added Successfully","tokens" : {accessToken}};
     } catch (error) {
         let err = Error(error.message);
         err.status = 500;
@@ -21,13 +20,13 @@ const registerUser = async(userdata)=>{
 const loginUser = async(loginData)=>{
     try {
         const userData  = await authRepo.getUserByEmail(loginData);
-        
+        console.log("userFound")
         if(userData && !_.isEmpty(userData)){
             const isValidPass = await authHelpers.comparePass(userData,loginData)
             if(isValidPass){
                 const accessToken = await authHelpers.generateAccessToken(userData);
-                const refreshToken  = await authHelpers.generateRefreshToken(userData);
-                return {"status": 200,"msg": "Login Successful","tokens" : {accessToken,refreshToken}};
+                // const refreshToken  = await authHelpers.generateRefreshToken(userData);
+                return {"status": 200,"msg": "Login Successful","tokens" : {accessToken}};
             }
         } else{
             return {"success":false,"status": 404,"msg":"User Not Found"};

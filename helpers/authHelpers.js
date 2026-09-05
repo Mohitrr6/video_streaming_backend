@@ -18,14 +18,15 @@ const hashPass  = async(password)=>{
 }
 const comparePass = async(userData,loginData)=>{
     try {
-        const {user_pass} =  loginData;
+        const {password} =  loginData;
         const {hashed_pass} = userData;
-        console.log(!user_pass)
-        console.log(!hashed_pass)
-        if(!user_pass || !hashed_pass){
+        // console.log(!user_pass)
+        // console.log(!hashed_pass)
+        if(!password || !hashed_pass){
             throw new Error("Incorrect Parameter");
         }
-        const result  = await bcrypt.compare(user_pass,hashed_pass);
+        console.log(password,hashed_pass);
+        const result  = await bcrypt.compare(password,hashed_pass);
         return result;
     } catch (error) {
         console.error(`error==>${error.message || error}`);
@@ -59,6 +60,7 @@ const generateRefreshToken = async(userNewData)=>{
 }
 const prepareNewUser = async(userData)=>{
     try {
+        console.log("this is userData",userData)
         const {name,email,password} = userData;
         const newData = {
             "user_id": uvid(),
