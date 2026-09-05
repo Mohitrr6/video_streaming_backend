@@ -25,7 +25,9 @@ app.use(cookieParser());
 app.get('/',(req,res)=>{
     res.status(200).json("test");
 })
-
+app.get("/respond",(req,res)=>{
+    res.status(200).json("working");
+})
 app.use('/api/auth',authRouter);
 app.use('/api/media',mediaRouter);
 app.listen(process.env.PORT,async()=>{
