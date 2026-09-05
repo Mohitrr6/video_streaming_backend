@@ -85,7 +85,6 @@ const qualities = [
 const transcoder = async (jobId,oncomplete) => {
     try {
 
-        console.log(execSync("where ffmpeg").toString());
         const filePath = `${process.cwd().replace(/\\/g, "/")}/uploads/${jobId}/output.mp4`;
         await fsp.mkdir(`${process.cwd().replace(/\\/g, "/")}/uploads/${jobId}/output`, { recursive: true });
         const outputPath = `${process.cwd().replace(/\\/g, "/")}/uploads/${jobId}/test`;
