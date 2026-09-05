@@ -84,6 +84,8 @@ const qualities = [
 
 const transcoder = async (jobId,oncomplete) => {
     try {
+
+        console.log(execSync("where ffmpeg").toString());
         const filePath = `${process.cwd().replace(/\\/g, "/")}/uploads/${jobId}/output.mp4`;
         await fsp.mkdir(`${process.cwd().replace(/\\/g, "/")}/uploads/${jobId}/output`, { recursive: true });
         const outputPath = `${process.cwd().replace(/\\/g, "/")}/uploads/${jobId}/test`;
@@ -124,10 +126,10 @@ const transcoder = async (jobId,oncomplete) => {
     "pad=1920:1080:(ow-iw)/2:(oh-ih)/2[v1080out];" +
 
     // =========================
-    // THUMBNAIL
+    // THUMBNAIL - FRAME 5
     // =========================
 
-    "[0:v]select='eq(n,0)',scale=640:-2[thumb]",
+    "[0:v]select='eq(n,5)',scale=640:-2[thumb]",
 
     // =========================
     // 240p
@@ -137,6 +139,7 @@ const transcoder = async (jobId,oncomplete) => {
     "-map", "0:a?",
 
     "-c:v:0", "libx264",
+    "-threads:v:0", "1",
     "-b:v:0", "400k",
     "-maxrate:v:0", "450k",
     "-bufsize:v:0", "800k",
@@ -152,6 +155,7 @@ const transcoder = async (jobId,oncomplete) => {
     "-map", "0:a?",
 
     "-c:v:1", "libx264",
+    "-threads:v:1", "1",
     "-b:v:1", "800k",
     "-maxrate:v:1", "900k",
     "-bufsize:v:1", "1600k",
@@ -167,6 +171,7 @@ const transcoder = async (jobId,oncomplete) => {
     "-map", "0:a?",
 
     "-c:v:2", "libx264",
+    "-threads:v:2", "1",
     "-b:v:2", "1400k",
     "-maxrate:v:2", "1600k",
     "-bufsize:v:2", "2800k",
@@ -182,6 +187,7 @@ const transcoder = async (jobId,oncomplete) => {
     "-map", "0:a?",
 
     "-c:v:3", "libx264",
+    "-threads:v:3", "1",
     "-b:v:3", "2800k",
     "-maxrate:v:3", "3200k",
     "-bufsize:v:3", "5600k",
@@ -197,6 +203,7 @@ const transcoder = async (jobId,oncomplete) => {
     "-map", "0:a?",
 
     "-c:v:4", "libx264",
+    "-threads:v:4", "1",
     "-b:v:4", "5000k",
     "-maxrate:v:4", "5500k",
     "-bufsize:v:4", "10000k",
@@ -208,9 +215,8 @@ const transcoder = async (jobId,oncomplete) => {
     // ENCODING
     // =========================
 
-    "-preset", "medium",
+    "-preset", "veryfast",
 
-    // Force all variants to have the same GOP structure
     "-g", "48",
     "-keyint_min", "48",
     "-sc_threshold", "0",
@@ -226,11 +232,8 @@ const transcoder = async (jobId,oncomplete) => {
     // =========================
 
     "-f", "hls",
-
     "-hls_time", "6",
-
     "-hls_playlist_type", "vod",
-
     "-hls_flags", "independent_segments",
 
     "-hls_segment_filename",
@@ -261,7 +264,7 @@ const transcoder = async (jobId,oncomplete) => {
     // =========================
 
     "-map", "[thumb]",
-    "-frames:v", "10",
+    "-frames:v", "1",
     "-q:v", "8",
     "-f", "image2",
 
