@@ -7,7 +7,7 @@ import { parentPort } from 'worker_threads';
 import redisClient from '../config/redis.js';
 import mediaRepo from '../repository/mediaRepo.js';
 
-parentPort.on('message', async (workerData) => {
+
     try {
         while (true) {
 
@@ -56,7 +56,7 @@ parentPort.on('message', async (workerData) => {
     } catch (error) {
         console.error(`Error in worker=>${error.message || error}`);
     }
-})
+
 
 
 const qualities = [

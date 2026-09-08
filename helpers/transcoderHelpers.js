@@ -31,9 +31,6 @@ const transcodeVideo = async () => {
         worker.on("exit", (code) => {
             console.log(`Worker exited with code ${code}`);
         });
-        worker.postMessage({
-            "data":"hello"
-        })
 
 
 
