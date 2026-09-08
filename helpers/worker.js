@@ -45,7 +45,7 @@ parentPort.on('message', async (workerData) => {
                 try {
                     await mediaRepo.updateVideoStatus(jobId);
                     console.log("Trancoding Complete");
-
+                    
                 } catch (error) {
                     console.log("Error in transcoding");
                 }
@@ -284,6 +284,7 @@ const transcoder = async (jobId,oncomplete) => {
             ffmpegProc.on("close", (code) => {
                 if (code === 0) {
                     console.log("Transcoding successful");
+                    oncomplete(true);
                     resolve();
                 } else {
                     reject(new Error(`FFmpeg exited with code ${code}`));
