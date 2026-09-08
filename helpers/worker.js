@@ -270,29 +270,27 @@ const transcoder = async (jobId,oncomplete) => {
     `${outputPath}/thumbnail.jpg`
 ];
 
-    const ffmpegProc = spawn('ffmpeg',ffmpegArgs);
+   return new Promise(async (resolve, reject) => {
+            // existing directory setup and ffmpegArgs...
 
-        ffmpegProc.stderr.on("data", (data) => {
-            console.log(data.toString());
-        });
-        ffmpegProc.on("error", (error) => {
-    console.error("FFmpeg spawn error:", error);
+            const ffmpegProc = spawn("ffmpeg", ffmpegArgs);
 
-     
-});
-ffmpegProc.on("close", (code) => {
+            ffmpegProc.stderr.on("data", (data) => {
+                console.log(data.toString());
+            });
 
-        if (code === 0) {
-            console.log("✅ Transcoding successful");
-            oncomplete(true);
-            
-        } else {
-            console.log(`❌ Transcoding failed. Exit code: ${code}`);
-            
-        }
+            ffmpegProc.on("error", reject);
 
-    });
-
+            ffmpegProc.on("close", (code) => {
+                if (code === 0) {
+                    console.log("Transcoding successful");
+                    resolve();
+                } else {
+                    reject(new Error(`FFmpeg exited with code ${code}`));
+                }
+            });
+        
+        })
 
 
         
